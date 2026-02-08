@@ -15,7 +15,10 @@ export default function Navbar() {
     return (
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-brand-black/80 backdrop-blur-md py-4' : 'bg-transparent py-6'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center">
-                <Logo className="h-8 md:h-10 w-auto" />
+                {/* Adjusted Logo Container Sizing */}
+                <div className="w-32 md:w-48 h-12 md:h-16 flex items-center">
+                    <Logo className="w-full h-full" />
+                </div>
 
                 <div className="hidden md:flex items-center space-x-8 font-sans font-medium text-brand-white">
                     <a href="#approach" className="hover:text-brand-tahiti transition-colors">Approach</a>
@@ -26,7 +29,6 @@ export default function Navbar() {
                     </a>
                 </div>
 
-                {/* Mobile Menu Icon Placeholder */}
                 <button className="md:hidden text-brand-white">
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
