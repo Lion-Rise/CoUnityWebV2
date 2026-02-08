@@ -10,6 +10,7 @@ export default function Logo({ className = "h-12 w-48" }) {
                 frameCount={82}
                 fileNamePrefix="frame_"
                 className="w-full h-full object-contain"
+                mode="contain"
             />
         </div>
     );

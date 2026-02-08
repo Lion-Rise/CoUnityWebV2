@@ -5,12 +5,12 @@ export default function ImageSequence({
     frameCount,
     fileNamePrefix = 'frame_',
     className,
+    mode = 'cover', // 'cover' or 'contain'
     onLoadComplete // Optional callback when all images are loaded
 }) {
     const canvasRef = useRef(null);
     const [images, setImages] = useState([]);
     const [loadedCount, setLoadedCount] = useState(0);
-    const [currentFrame, setCurrentFrame] = useState(0);
 
     // Preload Images
     useEffect(() => {
@@ -41,24 +41,22 @@ export default function ImageSequence({
         }
     }, [loadedCount, frameCount, onLoadComplete]);
 
-    // Animation Loop - Simple Auto-Play for "Morph" effect
+    // Animation Loop
     useEffect(() => {
         if (loadedCount < frameCount) return;
 
         let animationFrameId;
         let frameIndex = 0;
         let lastTime = 0;
-        const fps = 30; // Control speed here
+        const fps = 30;
         const interval = 1000 / fps;
 
         const render = (currentTime) => {
             animationFrameId = requestAnimationFrame(render);
-
             const deltaTime = currentTime - lastTime;
 
             if (deltaTime > interval) {
                 lastTime = currentTime - (deltaTime % interval);
-
                 const canvas = canvasRef.current;
                 if (!canvas) return;
 
@@ -66,44 +64,58 @@ export default function ImageSequence({
                 const img = images[frameIndex];
 
                 if (img) {
-                    // Maintain aspect ratio cover
                     const canvasAspect = canvas.width / canvas.height;
                     const imgAspect = img.width / img.height;
-
                     let renderW, renderH, offsetX, offsetY;
 
-                    if (canvasAspect > imgAspect) {
-                        renderW = canvas.width;
-                        renderH = canvas.width / imgAspect;
-                        offsetX = 0;
-                        offsetY = (canvas.height - renderH) / 2;
+                    if (mode === 'contain') {
+                        // Contain Logic
+                        if (canvasAspect > imgAspect) {
+                            renderH = canvas.height;
+                            renderW = canvas.height * imgAspect;
+                            offsetX = 0; // Align Left for Logo
+                            offsetY = 0;
+                        } else {
+                            renderW = canvas.width;
+                            renderH = canvas.width / imgAspect;
+                            offsetX = 0;
+                            offsetY = (canvas.height - renderH) / 2;
+                        }
                     } else {
-                        renderW = canvas.height * imgAspect;
-                        renderH = canvas.height;
-                        offsetX = (canvas.width - renderW) / 2;
-                        offsetY = 0;
+                        // Cover Logic (Default)
+                        if (canvasAspect > imgAspect) {
+                            renderW = canvas.width;
+                            renderH = canvas.width / imgAspect;
+                            offsetX = 0;
+                            offsetY = (canvas.height - renderH) / 2;
+                        } else {
+                            renderW = canvas.height * imgAspect;
+                            renderH = canvas.height;
+                            offsetX = (canvas.width - renderW) / 2;
+                            offsetY = 0;
+                        }
                     }
 
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
                 }
 
-                // Loop logic: Ping-pong or Loop?
-                // For the "Morph" gif, a loop usually works best.
                 frameIndex = (frameIndex + 1) % frameCount;
             }
         };
 
         animationFrameId = requestAnimationFrame(render);
         return () => cancelAnimationFrame(animationFrameId);
-    }, [loadedCount, frameCount, images]);
+    }, [loadedCount, frameCount, images, mode]);
 
-    // Handle Resize
+    // Handle Resize (Match Container, Not Window)
     useEffect(() => {
         const handleResize = () => {
-            if (canvasRef.current) {
-                canvasRef.current.width = window.innerWidth;
-                canvasRef.current.height = window.innerHeight;
+            const canvas = canvasRef.current;
+            if (canvas && canvas.parentElement) {
+                // Set internal resolution to match display size 1:1
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
             }
         };
 
@@ -116,7 +128,7 @@ export default function ImageSequence({
     return (
         <canvas
             ref={canvasRef}
-            className={`block w-full h-full object-cover ${className}`}
+            className={`block w-full h-full object-contain ${className}`}
         />
     );
 }

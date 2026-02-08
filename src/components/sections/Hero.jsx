@@ -36,7 +36,7 @@ export default function Hero() {
                             frameCount={240}
                             fileNamePrefix="frame_"
                             onLoadComplete={() => setDnaLoaded(true)}
-                            className={`w-full h-full object-contain p-4 transition-opacity duration-1000 ${dnaLoaded ? 'opacity-100' : 'opacity-0'}`}
+                            className={`w-full h-full object-contain p-4`}
                         />
 
                         {/* Loading State */}
