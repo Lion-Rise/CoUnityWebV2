@@ -1,9 +1,27 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brand-tahiti: #006E87;
+  --color-brand-pink: #ECA9BB;
+  --color-brand-black: #000000;
+  --color-brand-white: #FFFFFF;
+  --color-brand-mint: #4EBAB3;
+  --color-brand-dark-tide: #002F3A;
+  --color-brand-light-pink: #FFE8EE;
+  --color-brand-silver: #AEBAB3;
+  --color-brand-coral: #F96361;
+
+  --font-sans: 'Montserrat', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --animate-spin-slow: spin 12s linear infinite;
+
+  --background-image-gradient-dark: linear-gradient(to right, #000000, #218E8D, #9FD1CB, #ECA9BB);
+  --background-image-gradient-light: linear-gradient(to right, #002F3A, #B0BCBC, #E0FFFA, #FFE8EE);
+}
 
 @layer base {
   body {
-    @apply antialiased text-slate-900 bg-white;
+    @apply antialiased text-brand-white bg-brand-black;
   }
 }
