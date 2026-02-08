@@ -15,8 +15,8 @@ export default function Navbar() {
     return (
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-brand-black/80 backdrop-blur-md py-4' : 'bg-transparent py-6'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center">
-                {/* Adjusted Logo Container Sizing */}
-                <div className="w-32 md:w-48 h-12 md:h-16 flex items-center">
+                {/* Adjusted Logo Container Sizing - Wider to prevent cropping */}
+                <div className="w-48 h-12 flex items-center">
                     <Logo className="w-full h-full" />
                 </div>
 
